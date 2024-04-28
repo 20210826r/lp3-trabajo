@@ -1,4 +1,9 @@
-% Predicado para hacer la consulta del IMC
+
+%modulo principal
+
+:-ensure_loaded(diagnostico).
+
+%Predicado para hacer la consulta del IMC
 diagnosticar_imc :-
     writeln('Ingrese su altura en metros: '),
     read(Altura),
@@ -25,4 +30,5 @@ interpretar_imc(IMC, 'Usted presenta obesidad') :-
 % Predicado para calcular el IMC
 calcular_imc(Altura, Peso, IMC) :-
     IMC is Peso / (Altura * Altura).
+
 
