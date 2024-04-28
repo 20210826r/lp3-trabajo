@@ -1,5 +1,4 @@
 nutricion(vitamina_B,desgano).
-nutricion(vitamina_B, desgano).
 nutricion(vitamina_B, fatiga).
 nutricion(vitamina_B, irritabilidad).
 
