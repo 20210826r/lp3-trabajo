@@ -1,3 +1,4 @@
 # lp3-trabajo Sistema Experto Prolog
 Integrantes:
--Rodrigo Mendoza Ortiz
+- Rodrigo Mendoza Ortiz
+- Jeferson Chalas Montes
