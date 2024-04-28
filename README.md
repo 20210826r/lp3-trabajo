@@ -2,3 +2,4 @@
 Integrantes:
 - Rodrigo Mendoza Ortiz
 - Jeferson Chalas Montes
+- Renato Alonso Canales Zevallos
