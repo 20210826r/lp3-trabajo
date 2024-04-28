@@ -1,1 +1,3 @@
-# lp3-trabajo
+# lp3-trabajo Sistema Experto Prolog
+Integrantes:
+-Rodrigo Mendoza Ortiz
