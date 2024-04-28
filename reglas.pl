@@ -1,2 +1,0 @@
-nutricion(vitaminaB,desgano).
-
