@@ -13,7 +13,7 @@ main :-
 inicio :-
     nl,
     write('\n---------------------------------------------\n'),
-    write('Prolog Sistema experto en Calidad Alimentativa'),
+    write('Prolog Sistema Experto en Calidad Alimentativa'),
     write('\n---------------------------------------------\n'),
     nl.
 
@@ -40,13 +40,10 @@ leer_problemas(Problemas) :-
         Problemas = [Respuesta | Problemas1]
     ).
 
-alimentos_relacionados(Problema, Alimentos) :-
-    findall(Alimento, comida(Alimento, Problema), Alimentos).
-
 inv_nutricion(Compuesto, Problema) :-
     nutricion(Problema, Compuesto).
 
-app_nutricion([], []).
+app_nutricion([],[]).
 app_nutricion([Compuesto | Compuestos], Problemas) :-
     inv_nutricion(Compuesto, Problema),
     app_nutricion(Compuestos, Problemas1),
@@ -64,5 +61,8 @@ imprimir_resultados([Problema | RestoProblemas]) :-
     write('Solucion: '), write(Problema), nl,
     write('Alimentos que lo contienen: '), write(Alimentos), nl,
     imprimir_resultados(RestoProblemas).
+
+alimentos_relacionados(Problema, Alimentos) :-
+    findall(Alimento, comida(Alimento, Problema), Alimentos).
 
 
