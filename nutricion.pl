@@ -65,4 +65,9 @@ imprimir_resultados([Problema | RestoProblemas]) :-
 alimentos_relacionados(Problema, Alimentos) :-
     findall(Alimento, comida(Alimento, Problema), Alimentos).
 
+%app_nutricion([],[]).
+%app_nutricion([Problema|Problemas],Compuestos):-
+%    inv_nutricion(Problema,Compuesto),
+%    app_nutricion(Problemas,Compuestos1),
+%    Compuestos = [Compuesto|Compuestos1].
 
