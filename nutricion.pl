@@ -8,7 +8,7 @@
 
 main:-
     inicio,
-    problemas([]).
+    problemas.
 
 inicio:-
     nl,
@@ -20,11 +20,11 @@ inicio:-
 % ok el problema es con main, si problemas([]) tiene una lista vacia da
 % problemas, no se porque.
 % problemas(Lista) funciona correctamente
-problemas(Res):-
+problemas:-
     write('Escriba sus síntomas'),nl,
     write('Posibles problemas: desgano - fatiga - irritabilidad - debilidad - etc'),
     nl,
-    write('Al finlizar los sintomas escriba "Stop"'),nl,
+    write('Al finalizar los síntomas escriba "Stop"'),nl,
     leer_problemas(Lista),
     nostring(Lista,Lista2),
     app_nutricion(Lista2,Res),
