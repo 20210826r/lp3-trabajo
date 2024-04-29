@@ -17,6 +17,9 @@ inicio:-
     write('\n---------------------------------------------\n'),
     nl.
 %hay un problema con los ouputs creo, funcionan bien individualmente
+% ok el problema es con main, si problemas([]) tiene una lista vacia da
+% problemas, no se porque.
+% problemas(Lista) funciona correctamente
 problemas(Res):-
     write('Escriba sus síntomas'),nl,
     write('Posibles problemas: desgano - fatiga - irritabilidad - debilidad - etc'),
@@ -25,7 +28,7 @@ problemas(Res):-
     leer_problemas(Lista),
     nostring(Lista,Lista2),
     app_nutricion(Lista2,Res),
-    write(Res).
+    print(Res).
 
 
 leer_problemas(Problemas):-
