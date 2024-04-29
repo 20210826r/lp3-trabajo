@@ -62,7 +62,7 @@ imprimir_resultados([]).
 imprimir_resultados([Problema | RestoProblemas]) :-
     alimentos_relacionados(Problema, Alimentos),
     write('Solucion: '), write(Problema), nl,
-    write('Alimentos relacionados: '), write(Alimentos), nl,
+    write('Alimentos que lo contienen: '), write(Alimentos), nl,
     imprimir_resultados(RestoProblemas).
 
 
