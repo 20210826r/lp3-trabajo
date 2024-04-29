@@ -61,7 +61,7 @@ nostring(Listastring, Nostring) :-
 imprimir_resultados([]).
 imprimir_resultados([Problema | RestoProblemas]) :-
     alimentos_relacionados(Problema, Alimentos),
-    write('Problema: '), write(Problema), nl,
+    write('Solucion: '), write(Problema), nl,
     write('Alimentos relacionados: '), write(Alimentos), nl,
     imprimir_resultados(RestoProblemas).
 
