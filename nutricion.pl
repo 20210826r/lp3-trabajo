@@ -4,12 +4,11 @@
 :-ensure_loaded(imc).
 
 :-dynamic(nutricion/2).
-:-dynamic(sintoma/2).
+:-dynamic(comida/2).
 
 main:-
     inicio,
     problemas([]).
-
 
 inicio:-
     nl,
@@ -17,17 +16,17 @@ inicio:-
     write('Prolog Sistema experto en Calidad Alimentativa'),
     write('\n---------------------------------------------\n'),
     nl.
-
-problemas(Problemas):-
+%hay un problema con los ouputs creo, funcionan bien individualmente
+problemas(Res):-
     write('Escriba sus síntomas'),nl,
     write('Posibles problemas: desgano - fatiga - irritabilidad - debilidad - etc'),
     nl,
     write('Al finlizar los sintomas escriba "Stop"'),nl,
-    retractall(nutricion(_,Problemas)),
     leer_problemas(Lista),
-    forall(member(X,Lista),assertz(nutricion(_,X))),
-    write(Lista),
-    nutricion(_,Problemas).
+    nostring(Lista,Lista2),
+    app_nutricion(Lista2,Res),
+    write(Res).
+
 
 leer_problemas(Problemas):-
     write('Ingrese su problema: \n'),
@@ -40,6 +39,21 @@ leer_problemas(Problemas):-
         leer_problemas(Problemas1),
         Problemas = [Respuesta|Problemas1]
     ).
+
+inv_nutricion(Compuesto,Problema) :-
+    nutricion(Problema,Compuesto).
+app_nutricion([],[]).
+app_nutricion([Compuesto|Compuestos],Problemas):-
+    inv_nutricion(Compuesto,Problema),
+    app_nutricion(Compuestos,Problemas1),
+    Problemas = [Problema|Problemas1].
+
+string_to_nonstring(Listastring,Nein) :-
+    read_term_from_atom(Listastring,Nein,[]).
+%no se que nombre ponerle
+nostring(Listastring,Nostring):-
+    maplist(string_to_nonstring,Listastring,Nostring).
+
 
 
 
