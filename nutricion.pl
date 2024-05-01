@@ -22,10 +22,9 @@ problemas :-
     write('Posibles problemas: desgano - fatiga - irritabilidad - debilidad - etc'), nl,
     write('Al finalizar los sintomas escriba "Stop"'), nl,
     leer_problemas(Lista),
+    leer_genero(Genero), % Agregamos la lectura del genero aqui
     nostring(Lista, Lista2),
-    %Implementacion de la edad
-    leer_edad(Edad),
-    write(Edad),
+    leer_edad(Edad), % Si es necesario, tambien podrias solicitar la edad aqui
     app_nutricion(Lista2, Res),
     imprimir_resultados(Res).
 
@@ -43,10 +42,10 @@ leer_problemas(Problemas) :-
 inv_nutricion(Compuesto, Problema) :-
     nutricion(Problema, Compuesto).
 
-app_nutricion([],[]).
-app_nutricion([Compuesto | Compuestos], Problemas) :-
+app_nutricion([], [], _).
+app_nutricion([Compuesto | Compuestos], Problemas, Genero) :-
     inv_nutricion(Compuesto, Problema),
-    app_nutricion(Compuestos, Problemas1),
+    app_nutricion(Compuestos, Problemas1, Genero),
     Problemas = [Problema | Problemas1].
 
 string_to_nonstring(Lista, Nostring) :-
@@ -62,22 +61,24 @@ leer_edad(Edad_n):-
 verificar_edad(Edad_n):-
     write("Ingrese su edad: "),
     read_string(user,"\n","\r","_",Input),
-    read_line_to_string(Input,Edad), %Pasar el input a string
-    catch(number_string(Edad_n,Edad),_,fail). % Convertir el string a numerico
-    %catch(:Goal, +ExceptionTerm, :RecoveryGoal)
-    %Goal es converitir Edad a numerico
-    %No se especifico un Catch
-    %si no se puede convertir la funcion da resultado fallo
+    read_line_to_string(Input,_), % No necesitamos asignar a Edad
+    catch(number_string(Edad_n,Input),_,fail).
+
 verificar_edad2(Edad_n):-
     repeat,
     verificar_edad(Edad_n),
-    !.%Si se da un resultado correcto corta la funcion
+    !.
 
+leer_genero(Genero):-
+    write("Ingrese su género (masculino/femenino): "),
+    read_string(user, "\n", "\r", _, Genero).
+
+% Luego puedes usar esta información para hacer recomendaciones de alimentos basadas en el género.
 
 imprimir_resultados([]).
 imprimir_resultados([Problema | RestoProblemas]) :-
     alimentos_relacionados(Problema, Alimentos),
-    write('Solucion: '), write(Problema), nl,
+    write('Solución: '), write(Problema), nl,
     write('Alimentos que lo contienen: '), write(Alimentos), nl,
     imprimir_resultados(RestoProblemas).
 
@@ -89,4 +90,3 @@ alimentos_relacionados(Problema, Alimentos) :-
 %    inv_nutricion(Problema,Compuesto),
 %    app_nutricion(Problemas,Compuestos1),
 %    Compuestos = [Compuesto|Compuestos1].
-
