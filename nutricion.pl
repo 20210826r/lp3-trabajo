@@ -22,9 +22,11 @@ problemas :-
     write('Posibles problemas: desgano - fatiga - irritabilidad - debilidad - etc'), nl,
     write('Al finalizar los sintomas escriba "Stop"'), nl,
     leer_problemas(Lista),
-    leer_genero(Genero), % Agregamos la lectura del genero aqui
+    leer_genero(Genero),nl, % Agregamos la lectura del genero aqui
+    write(Genero),
     nostring(Lista, Lista2),
     leer_edad(Edad), % Si es necesario, tambien podrias solicitar la edad aqui
+    write(Edad),nl,
     app_nutricion(Lista2, Res),
     imprimir_resultados(Res).
 
@@ -42,7 +44,7 @@ leer_problemas(Problemas) :-
 inv_nutricion(Compuesto, Problema) :-
     nutricion(Problema, Compuesto).
 
-app_nutricion([], [], _).
+app_nutricion([],[]).
 app_nutricion([Compuesto | Compuestos], Problemas, Genero) :-
     inv_nutricion(Compuesto, Problema),
     app_nutricion(Compuestos, Problemas1, Genero),
@@ -70,23 +72,26 @@ verificar_edad2(Edad_n):-
     !.
 
 leer_genero(Genero):-
-    write("Ingrese su género (masculino/femenino): "),
-    read_string(user, "\n", "\r", _, Genero).
+    write("Ingrese su genero (masculino/femenino): "),
+    read_string(user, "\n", "\r", _, Genero_indf),
+    (
+      Genero_indf = "masculino";
+      Genero_indf == "femenino"
+    ),
+    !,
+    Genero = Genero_indf.
 
-% Luego puedes usar esta información para hacer recomendaciones de alimentos basadas en el género.
+% Luego puedes usar esta informacion para hacer recomendaciones de
+% alimentos basadas en el genero.
 
 imprimir_resultados([]).
 imprimir_resultados([Problema | RestoProblemas]) :-
     alimentos_relacionados(Problema, Alimentos),
-    write('Solución: '), write(Problema), nl,
+    write('Solucion: '), write(Problema), nl,
     write('Alimentos que lo contienen: '), write(Alimentos), nl,
     imprimir_resultados(RestoProblemas).
 
 alimentos_relacionados(Problema, Alimentos) :-
     findall(Alimento, comida(Alimento, Problema), Alimentos).
 
-%app_nutricion([],[]).
-%app_nutricion([Problema|Problemas],Compuestos):-
-%    inv_nutricion(Problema,Compuesto),
-%    app_nutricion(Problemas,Compuestos1),
-%    Compuestos = [Compuesto|Compuestos1].
+
