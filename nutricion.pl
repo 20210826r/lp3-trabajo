@@ -1,4 +1,4 @@
-% Módulo principal
+% Modulo principal
 
 :- ensure_loaded(diagnostico).
 :- ensure_loaded(imc).
@@ -12,20 +12,20 @@ main :-
 
 inicio :-
     nl,
-    write('\n---------------------------------------------\n'),
+    write('\n----------------------------------------------\n'),
     write('Prolog Sistema Experto en Calidad Alimentativa'),
-    write('\n---------------------------------------------\n'),
+    write('\n----------------------------------------------\n'),
     nl.
 
-% Hay un problema con los ouputs, funcionan bien individualmente.
-% El problema es con main, si problemas([]) tiene una lista vacía da problemas, no sé por qué.
-% problemas(Lista) funciona correctamente.
 problemas :-
     write('Escriba sus sintomas'), nl,
     write('Posibles problemas: desgano - fatiga - irritabilidad - debilidad - etc'), nl,
     write('Al finalizar los sintomas escriba "Stop"'), nl,
     leer_problemas(Lista),
     nostring(Lista, Lista2),
+    %Implementacion de la edad
+    leer_edad(Edad),
+    write(Edad),
     app_nutricion(Lista2, Res),
     imprimir_resultados(Res).
 
@@ -49,11 +49,30 @@ app_nutricion([Compuesto | Compuestos], Problemas) :-
     app_nutricion(Compuestos, Problemas1),
     Problemas = [Problema | Problemas1].
 
-string_to_nonstring(Listastring, Nostring) :-
-    read_term_from_atom(Listastring, Nostring, []).
+string_to_nonstring(Lista, Nostring) :-
+    read_term_from_atom(Lista, Nostring, []).
 
-nostring(Listastring, Nostring) :-
-    maplist(string_to_nonstring, Listastring, Nostring).
+nostring(Lista, Nostring) :-
+    maplist(string_to_nonstring, Lista, Nostring).
+
+leer_edad(Edad_n):-
+    verificar_edad(Edad_n),
+    verificar_edad2(Edad_n).
+
+verificar_edad(Edad_n):-
+    write("Ingrese su edad: "),
+    read_string(user,"\n","\r","_",Input),
+    read_line_to_string(Input,Edad), %Pasar el input a string
+    catch(number_string(Edad_n,Edad),_,fail). % Convertir el string a numerico
+    %catch(:Goal, +ExceptionTerm, :RecoveryGoal)
+    %Goal es converitir Edad a numerico
+    %No se especifico un Catch
+    %si no se puede convertir la funcion da resultado fallo
+verificar_edad2(Edad_n):-
+    repeat,
+    verificar_edad(Edad_n),
+    !.%Si se da un resultado correcto corta la funcion
+
 
 imprimir_resultados([]).
 imprimir_resultados([Problema | RestoProblemas]) :-
