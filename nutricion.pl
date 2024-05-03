@@ -2,6 +2,7 @@
 
 :- ensure_loaded(diagnostico).
 :- ensure_loaded(imc).
+:- ensure_loaded(restricciones).
 
 :- dynamic(nutricion/2).
 :- dynamic(comida/2).
@@ -19,14 +20,15 @@ inicio :-
 
 problemas :-
     write('Escriba sus sintomas'), nl,
-    write('Posibles problemas: desgano - fatiga - irritabilidad - debilidad - etc'), nl,
+    write('Posibles problemas: desgano - fatiga - irritabilidad - debilidad-'), nl,
+    write('dolor articular - piel_seca - fatiga - palidez - falta_de_concentracion'),nl,
+    write('calambres_musculares - debilidad_osea - osteoporosis - depresion - ansiedad - problemas_de_memoria'),
     write('Al finalizar los sintomas escriba "Stop"'), nl,
     leer_problemas(Lista),
-    leer_genero(Genero),nl, % Agregamos la lectura del genero aqui
-    write(Genero),
+    %leer_genero(Genero),nl, % Agregamos la lectura del genero aqui
     nostring(Lista, Lista2),
     leer_edad(Edad), % Si es necesario, tambien podrias solicitar la edad aqui
-    write(Edad),nl,
+    write(Edad),
     app_nutricion(Lista2, Res),
     imprimir_resultados(Res).
 
@@ -45,9 +47,9 @@ inv_nutricion(Compuesto, Problema) :-
     nutricion(Problema, Compuesto).
 
 app_nutricion([],[]).
-app_nutricion([Compuesto | Compuestos], Problemas, Genero) :-
+app_nutricion([Compuesto | Compuestos], Problemas) :-
     inv_nutricion(Compuesto, Problema),
-    app_nutricion(Compuestos, Problemas1, Genero),
+    app_nutricion(Compuestos, Problemas1),
     Problemas = [Problema | Problemas1].
 
 string_to_nonstring(Lista, Nostring) :-
@@ -57,18 +59,13 @@ nostring(Lista, Nostring) :-
     maplist(string_to_nonstring, Lista, Nostring).
 
 leer_edad(Edad_n):-
-    verificar_edad(Edad_n),
-    verificar_edad2(Edad_n).
+    repeat,
+    verificar_edad(Edad_n).
 
 verificar_edad(Edad_n):-
     write("Ingrese su edad: "),
-    read_string(user,"\n","\r","_",Input),
-    read_line_to_string(Input,_), % No necesitamos asignar a Edad
-    catch(number_string(Edad_n,Input),_,fail).
-
-verificar_edad2(Edad_n):-
-    repeat,
-    verificar_edad(Edad_n),
+    read_string(user,"\n","\r",_,Edad),
+    catch(number_string(Edad_n,Edad),_,fail),
     !.
 
 leer_genero(Genero):-
@@ -91,7 +88,7 @@ imprimir_resultados([Problema | RestoProblemas]) :-
     write('Alimentos que lo contienen: '), write(Alimentos), nl,
     imprimir_resultados(RestoProblemas).
 
-alimentos_relacionados(Problema, Alimentos) :-
-    findall(Alimento, comida(Alimento, Problema), Alimentos).
+alimentos_relacionados(Problemas, Alimentos) :-
+    findall(Alimento, comida(Alimento, Problemas), Alimentos).
 
 
