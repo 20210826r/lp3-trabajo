@@ -2,7 +2,6 @@
 
 :- ensure_loaded(diagnostico).
 :- ensure_loaded(imc).
-:- ensure_loaded(restricciones).
 
 :- dynamic(nutricion/2).
 :- dynamic(comida/2).
@@ -21,17 +20,30 @@ inicio :-
 problemas :-
     write('Escriba sus sintomas'), nl,
     write('Posibles problemas: desgano - fatiga - irritabilidad - debilidad-'), nl,
-    write('dolor articular - piel_seca - fatiga - palidez - falta_de_concentracion'),nl,
-    write('calambres_musculares - debilidad_osea - osteoporosis - depresion - ansiedad - problemas_de_memoria'),
+    write('dolor_articular - piel_seca - palidez - falta_de_concentracion'),nl,
+    write('calambres_musculares - debilidad_osea - osteoporosis - depresion - ansiedad - problemas_de_memoria \n'),
     write('Al finalizar los sintomas escriba "Stop"'), nl,
     leer_problemas(Lista),
-    leer_genero(Genero),nl, % Agregamos la lectura del genero aqui
-    write(Genero),
+    write('Por favor, ingrese su edad: \n'), read(Edad),
     nostring(Lista, Lista2),
-    leer_edad(Edad), % Si es necesario, tambien podrias solicitar la edad aqui
-    write(Edad),
+    write('Por favor, ingrese su genero (masculino o femenino): \n'), read(Genero),
+    write('Por favor, ingrese su peso (en kilogramos): \n'), read(Peso),
+    write('Por favor, ingrese su altura (en metros): \n'), read(Altura),
+    (   (Edad >= 3, Edad =< 10) -> Recomendacion = 'frutas, verduras, cereales, carnes, pescados y lacteos';
+        (Edad >= 10, Edad =< 18) -> Recomendacion = 'alimentacion completa que tenga en cantidad y calidad los tres grupos del plato del bien comer (frutas y verduras; cereales y tuberculos y leguminosas y alimentos de origen animal)';
+        (Edad >= 18, Edad =< 40, Genero = 'masculino') -> Recomendacion = 'leche y sus derivados, carnes, pescado, huevo, cereales, leguminosas y verduras';
+        (Edad >= 18, Edad =< 40, Genero = 'femenino') -> Recomendacion = 'carnes, visceras, aves, pescados, vegetales de hoja verde como espinacas, berros y acelgas';
+        (Edad >= 40, Edad =< 65) -> Recomendacion = 'lacteos como leche, requeson, quesos frescos, carnes, pescado, jamon, huevos, pollo, pan integral, arroz, leguminosas, frutas y verduras en general';
+        Recomendacion = 'No hay recomendacion disponible para esta edad y genero'),
+    write('Segun su edad y genero se recomienda consumir: '), write(Recomendacion), nl,
+    write('Adicionalmente lo que que podria solucionar sus sintomas: \n'),
+    imc(Altura, Peso, IMC),
+    clasificar_imc(IMC, Clasificacion),
     app_nutricion(Lista2, Res),
-    imprimir_resultados(Res).
+    list_to_set(Res, ResSinRepetidos), % Eliminar duplicados
+    imprimir_resultados(ResSinRepetidos),
+    write('Su IMC es: '), write(IMC), nl,
+    write('Segun su IMC, usted tiene: '), write(Clasificacion).
 
 leer_problemas(Problemas) :-
     write('Ingrese su problema: \n'),
@@ -44,8 +56,8 @@ leer_problemas(Problemas) :-
         Problemas = [Respuesta | Problemas1]
     ).
 
-inv_nutricion(Compuesto, Problema) :-
-    nutricion(Problema, Compuesto).
+inv_nutricion(Problema, Compuesto) :-
+    nutricion(Compuesto, Problema).
 
 app_nutricion([],[]).
 app_nutricion([Compuesto | Compuestos], Problemas) :-
@@ -59,25 +71,6 @@ string_to_nonstring(Lista, Nostring) :-
 nostring(Lista, Nostring) :-
     maplist(string_to_nonstring, Lista, Nostring).
 
-leer_edad(Edad_n):-
-    write("Ingrese su edad: "),
-    read_string(user,"\n","\r",_,Edad),
-    catch(number_string(Edad_n,Edad),_,fail),
-    !.
-
-leer_genero(Genero):-
-    write("Ingrese su genero (masculino/femenino): "),
-    read_string(user, "\n", "\r", _, Genero_indf),
-    (
-      Genero_indf = "masculino";
-      Genero_indf == "femenino"
-    ),
-    !,
-    Genero = Genero_indf.
-
-% Luego puedes usar esta informacion para hacer recomendaciones de
-% alimentos basadas en el genero.
-
 imprimir_resultados([]).
 imprimir_resultados([Problema | RestoProblemas]) :-
     alimentos_relacionados(Problema, Alimentos),
@@ -87,5 +80,17 @@ imprimir_resultados([Problema | RestoProblemas]) :-
 
 alimentos_relacionados(Problemas, Alimentos) :-
     findall(Alimento, comida(Alimento, Problemas), Alimentos).
+
+% Predicado para calcular el IMC
+imc(Altura, Peso, IMC) :-
+    IMC is Peso / (Altura * Altura).
+
+% Predicados para clasificar el IMC
+clasificar_imc(IMC, 'Bajo Peso') :- IMC < 18.5.
+clasificar_imc(IMC, 'Peso Normal') :- IMC >= 18.5, IMC < 24.9.
+clasificar_imc(IMC, 'Sobrepeso') :- IMC >= 25, IMC < 29.9.
+clasificar_imc(IMC, 'Obesidad') :- IMC >= 30.
+
+
 
 
