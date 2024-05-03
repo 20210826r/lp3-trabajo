@@ -28,7 +28,13 @@ recomendar_alimentos :-
     imc(Altura, Peso, IMC),
     write('Su IMC es: '), write(IMC), nl,
     clasificar_imc(IMC, Clasificacion),
-    write('Segun su IMC, usted tiene: '), write(Clasificacion), nl.
+    write('Segun su IMC, usted tiene: '), write(Clasificacion), nl,
+    write('Adicionalmente, se recomienda consumir los siguientes alimentos para aliviar el sintoma: '), nl,
+    listar_alimentos_sintoma(Sintoma).
+
+listar_alimentos_sintoma(Sintoma) :-
+    findall(Alimento, nutricion(Alimento, Sintoma), Alimentos),
+    write('Alimentos recomendados para aliviar el sintoma: '), write(Alimentos), nl.
 
 % Ejemplo de uso:
 % recomendar_alimentos.
