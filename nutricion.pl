@@ -25,7 +25,8 @@ problemas :-
     write('calambres_musculares - debilidad_osea - osteoporosis - depresion - ansiedad - problemas_de_memoria'),
     write('Al finalizar los sintomas escriba "Stop"'), nl,
     leer_problemas(Lista),
-    %leer_genero(Genero),nl, % Agregamos la lectura del genero aqui
+    leer_genero(Genero),nl, % Agregamos la lectura del genero aqui
+    write(Genero),
     nostring(Lista, Lista2),
     leer_edad(Edad), % Si es necesario, tambien podrias solicitar la edad aqui
     write(Edad),
@@ -59,10 +60,6 @@ nostring(Lista, Nostring) :-
     maplist(string_to_nonstring, Lista, Nostring).
 
 leer_edad(Edad_n):-
-    repeat,
-    verificar_edad(Edad_n).
-
-verificar_edad(Edad_n):-
     write("Ingrese su edad: "),
     read_string(user,"\n","\r",_,Edad),
     catch(number_string(Edad_n,Edad),_,fail),
